@@ -21,7 +21,7 @@ This Java Spring Boot application calculates the motor vehicle tax for Estonia, 
 To run the application:
 
 ```shell
-java -jar target/taxcalculator-0.0.1-SNAPSHOT.jar
+java -jar target/*.jar
 ```
 
 ## Contributing
