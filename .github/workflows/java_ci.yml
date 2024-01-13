@@ -1,0 +1,48 @@
+name: Java CI with Docker
+
+on:
+  push:
+  pull_request:
+
+env:
+  DOCKER_IMAGE_NAME: ktenman/automaks
+  DOCKER_IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: maven:3.9-eclipse-temurin-21-alpine
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v3.3.2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/ee/tenman
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2-
+      - run: mvn -T 1C --quiet -Dparallel=methods -DthreadCount=2 --batch-mode test
+
+  build_and_push:
+    if: github.ref == 'refs/heads/main' # Only run on the main branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 1
+      - uses: docker/setup-buildx-action@v3.0.0
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+          cache-to: type=inline
