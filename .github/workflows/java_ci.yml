@@ -26,8 +26,11 @@ jobs:
       - run: mvn -T 1C --quiet -Dparallel=methods -DthreadCount=2 --batch-mode test
 
   build_and_push:
-    if: github.ref == 'refs/heads/main' # Only run on the main branch
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ linux/amd64, linux/arm64/v8 ]
     steps:
       - uses: actions/checkout@v4.1.1
         with:
@@ -46,3 +49,4 @@ jobs:
           tags: ${{ env.DOCKER_IMAGE_NAME }}:latest
           cache-from: type=registry,ref=${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
           cache-to: type=inline
+          platforms: linux/amd64, linux/arm64/v8
