@@ -25,11 +25,7 @@ public class LoggingAspect {
 
     private static void setTransactionId(UUID uuid) {
         String transactionId = uuid.toString();
-        if (transactionId != null && !transactionId.isEmpty()) {
-            MDC.put(TRANSACTION_ID, "[" + transactionId + "] ");
-        } else {
-            MDC.remove(TRANSACTION_ID);
-        }
+        MDC.put(TRANSACTION_ID, "[" + transactionId + "] ");
     }
 
     private static void clearTransactionId() {
