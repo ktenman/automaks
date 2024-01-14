@@ -24,17 +24,9 @@ public class TimeUtility {
             return TimeUtility.formatDuration(durationInSeconds);
         }
 
-        public double asDouble() {
-            return durationInSeconds;
-        }
-
         @Override
         public String toString() {
             return asString();
-        }
-
-        public String getTaskDurationMessage() {
-            return "\n\nTask duration: " + asString() + " seconds";
         }
     }
 }

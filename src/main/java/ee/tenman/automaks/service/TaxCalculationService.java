@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static ee.tenman.automaks.config.TimeUtility.durationInSeconds;
 import static ee.tenman.automaks.dto.CarDetails.CO2Type.NEDC;
 
 @Service
@@ -48,13 +47,11 @@ public class TaxCalculationService {
 
     @Loggable
     public Mono<TaxResponse> calculateTax(CarDetails carDetails) {
-        long startTime = System.nanoTime();
         BigDecimal registrationTax = calculateRegistrationTax(carDetails);
         BigDecimal annualTax = calculateAnnualTax(carDetails);
         TaxResponse response = TaxResponse.builder()
                 .annualTax(annualTax)
                 .registrationTax(registrationTax)
-                .durationInSeconds(durationInSeconds(startTime).asDouble())
                 .build();
         return Mono.just(response);
     }

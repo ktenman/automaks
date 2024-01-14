@@ -16,5 +16,4 @@ import java.math.BigDecimal;
 public class TaxResponse {
     private BigDecimal registrationTax;
     private BigDecimal annualTax;
-    private double durationInSeconds;
 }
