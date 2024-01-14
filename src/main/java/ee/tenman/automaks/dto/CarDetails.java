@@ -18,6 +18,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Set;
+
+import static ee.tenman.automaks.dto.CarDetails.CarType.N1;
+import static ee.tenman.automaks.dto.CarDetails.CarType.N1G;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,12 +31,12 @@ import java.lang.annotation.Target;
 @CarDetails.ValidCarDetails
 public class CarDetails {
 
+    private static final Set<CarType> VAN_TYPES = Set.of(N1, N1G);
 
     @Schema(description = "CO2 emissions of the car", example = "188.0", nullable = true)
     private Double co2Emissions;
 
     @Schema(required = true, description = "The full mass of the car in kilograms", example = "2250")
-    @NotNull
     private Integer fullMass;
 
     @Schema(required = true, description = "The year of manufacture of the car", example = "2023")
@@ -121,6 +125,14 @@ public class CarDetails {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate("Missing CO2Type for vehicle with co2Emissions.")
                         .addPropertyNode("co2Type")
+                        .addConstraintViolation();
+                valid = false;
+            }
+
+            if (carDetails.getFullMass() == null && !VAN_TYPES.contains(carDetails.getCarType())) {
+                context.disableDefaultConstraintViolation();
+                context.buildConstraintViolationWithTemplate("Invalid car type for missing fullMass. Car type must be one of " + VAN_TYPES)
+                        .addPropertyNode("fullMass")
                         .addConstraintViolation();
                 valid = false;
             }

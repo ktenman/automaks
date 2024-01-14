@@ -102,12 +102,21 @@ public class TaxCalculationServiceTest {
                                 .build(),
                         "2220",
                         "242"),
-//                Arguments.of("Nissan Berlingo",
+                Arguments.of("Citroen Berlingo 2020",
+                        CarDetails.builder()
+                                .co2Emissions(150D)
+                                .carType(CarType.N1)
+                                .year(2020)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "500",
+                        "50"),
+//                Arguments.of("Citroen Berlingo 2020",
 //                        CarDetails.builder()
-//                                .co2Emissions(150D)
-//                                .fullMass(500)
+//                                .co2Emissions(247D)
 //                                .carType(CarType.N1)
-//                                .year(2020)
+//                                .year(210)
 //                                .electric(false)
 //                                .co2Type(CarDetails.CO2Type.WLTP)
 //                                .build(),
@@ -116,7 +125,6 @@ public class TaxCalculationServiceTest {
 //                Arguments.of("Citroen Jumper",
 //                        CarDetails.builder()
 //                                .co2Emissions(235D)
-//                                .fullMass(500)
 //                                .carType(CarType.N1)
 //                                .year(2022)
 //                                .electric(false)

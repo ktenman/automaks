@@ -33,7 +33,9 @@ public class LoggingAspect {
     }
 
     @Around("@annotation(ee.tenman.automaks.config.aspect.Loggable)")
-    public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logMethod(ProceedingJoinPoint joinPoint) {
+        long startTime = System.nanoTime();
+
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
 
@@ -42,7 +44,6 @@ public class LoggingAspect {
             throw new IllegalStateException("Loggable annotation cannot be used on methods with no return type");
         }
 
-        long startTime = System.nanoTime();
         setTransactionId(UUID.randomUUID());
         Object result = null;
         try {
@@ -56,7 +57,7 @@ public class LoggingAspect {
             return result;
         } catch (Throwable throwable) {
             log.error("Exception in method: {}", joinPoint.getSignature().toShortString(), throwable);
-            throw throwable;
+            throw new RuntimeException(throwable);
         } finally {
             if (!(result instanceof Mono)) {
                 clearTransactionId();
