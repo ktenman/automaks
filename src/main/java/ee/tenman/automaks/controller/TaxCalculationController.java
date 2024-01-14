@@ -23,4 +23,5 @@ public class TaxCalculationController {
     public Mono<ResponseEntity<TaxResponse>> calculateTax(@RequestBody @Valid CarDetails carDetails) {
         return taxCalculationService.calculateTax(carDetails).map(ResponseEntity::ok);
     }
+
 }
