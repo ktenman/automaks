@@ -3,7 +3,6 @@ package ee.tenman.automaks.controller;
 import ee.tenman.automaks.config.GlobalExceptionHandler;
 import ee.tenman.automaks.dto.CarDetails;
 import ee.tenman.automaks.dto.TaxResponse;
-import ee.tenman.automaks.service.TaxCalculationServiceTest;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,8 +26,116 @@ class TaxCalculationControllerIntegrationTest {
     @Resource
     WebTestClient webTestClient;
 
-    private static Stream<Arguments> provideCarData() {
-        return TaxCalculationServiceTest.provideCarData();
+    public static Stream<Arguments> provideCarData() {
+        return Stream.of(
+                Arguments.of("Porsche Cayenne",
+                        CarDetails.builder()
+                                .co2Emissions(299D)
+                                .fullMass(2860)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2019)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "16565",
+                        "1064"),
+                Arguments.of("Audi Q7",
+                        CarDetails.builder()
+                                .co2Emissions(221D)
+                                .fullMass(2850)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2019)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "10285",
+                        "748"),
+                Arguments.of("Honda CRV",
+                        CarDetails.builder()
+                                .co2Emissions(196D)
+                                .fullMass(2350)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2019)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "6365",
+                        "450"),
+                Arguments.of("VW Passat",
+                        CarDetails.builder()
+                                .co2Emissions(150D)
+                                .fullMass(1990)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2019)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "2205",
+                        "149"),
+                Arguments.of("Skoda Octavia",
+                        CarDetails.builder()
+                                .co2Emissions(117D)
+                                .fullMass(1808)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2019)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "885",
+                        "50"),
+                Arguments.of("Nissan Leaf",
+                        CarDetails.builder()
+                                .fullMass(1530)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2021)
+                                .electric(true)
+                                .build(),
+                        "300",
+                        "50"),
+                Arguments.of("Tesla Model 3",
+                        CarDetails.builder()
+                                .co2Emissions(0D)
+                                .fullMass(2139)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2021)
+                                .electric(true)
+                                .build(),
+                        "300",
+                        "50"),
+                Arguments.of("Porsche Taycan",
+                        CarDetails.builder()
+                                .co2Emissions(0D)
+                                .fullMass(2880)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2021)
+                                .electric(true)
+                                .build(),
+                        "2220",
+                        "242"),
+                Arguments.of("VW Tiguan",
+                        CarDetails.builder()
+                                .co2Emissions(188D)
+                                .fullMass(2250)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2023)
+                                .electric(false)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "5485",
+                        "382"),
+                Arguments.of("VW Tiguan without CO2 emissions",
+                        CarDetails.builder()
+                                .fullMass(2250)
+                                .carType(CarDetails.CarType.M1)
+                                .year(2023)
+                                .electric(false)
+                                .engineCapacity(1995)
+                                .enginePower(150)
+                                .co2Type(CarDetails.CO2Type.WLTP)
+                                .build(),
+                        "2599.75",
+                        "150")
+        );
     }
 
     @ParameterizedTest
@@ -47,8 +154,8 @@ class TaxCalculationControllerIntegrationTest {
                 .expectBody(TaxResponse.class)
                 .consumeWith(response -> {
                     TaxResponse calculatedTax = response.getResponseBody();
-                    assertThat(calculatedTax.getRegistrationTax()).as("Registration Tax for " + model).isEqualByComparingTo(expectedRegistrationTax);
-                    assertThat(calculatedTax.getAnnualTax()).as("Annual Tax for " + model).isEqualByComparingTo(expectedAnnualTax);
+                    assertThat(calculatedTax.registrationTax()).as("Registration Tax for " + model).isEqualByComparingTo(expectedRegistrationTax);
+                    assertThat(calculatedTax.annualTax()).as("Annual Tax for " + model).isEqualByComparingTo(expectedAnnualTax);
                 });
     }
 

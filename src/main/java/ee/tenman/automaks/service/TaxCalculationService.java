@@ -20,10 +20,7 @@ public class TaxCalculationService {
         BigDecimal registrationTax = taxCalculator.calculateRegistrationTax(carDetails);
         BigDecimal annualTax = taxCalculator.calculateAnnualTax(carDetails);
 
-        TaxResponse response = TaxResponse.builder()
-                .annualTax(annualTax)
-                .registrationTax(registrationTax)
-                .build();
+        TaxResponse response = new TaxResponse(registrationTax, annualTax);
 
         return Mono.just(response);
     }

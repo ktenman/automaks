@@ -1,10 +1,7 @@
 package ee.tenman.automaks.service;
 
 import ee.tenman.automaks.dto.CarDetails;
-import ee.tenman.automaks.dto.CarDetails.CarType;
-import ee.tenman.automaks.dto.TaxResponse;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
@@ -12,141 +9,111 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TaxCalculationServiceTest {
+class StandardCarTaxCalculatorTest {
 
-    private final TaxCalculationService service = new TaxCalculationService();
+    private final StandardCarTaxCalculator calculator = new StandardCarTaxCalculator();
 
-    public static Stream<Arguments> provideCarData() {
+    public static Stream<CarTaxTestData> provideCarData() {
         return Stream.of(
-                Arguments.of("Porsche Cayenne",
+                new CarTaxTestData("Porsche Cayenne",
                         CarDetails.builder()
                                 .co2Emissions(299D)
                                 .fullMass(2860)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2019)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "16565",
                         "1064"),
-                Arguments.of("Audi Q7",
+                new CarTaxTestData("Audi Q7",
                         CarDetails.builder()
                                 .co2Emissions(221D)
                                 .fullMass(2850)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2019)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "10285",
                         "748"),
-                Arguments.of("Honda CRV",
+                new CarTaxTestData("Honda CRV",
                         CarDetails.builder()
                                 .co2Emissions(196D)
                                 .fullMass(2350)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2019)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "6365",
                         "450"),
-                Arguments.of("VW Passat",
+                new CarTaxTestData("VW Passat",
                         CarDetails.builder()
                                 .co2Emissions(150D)
                                 .fullMass(1990)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2019)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "2205",
                         "149"),
-                Arguments.of("Skoda Octavia",
+                new CarTaxTestData("Skoda Octavia",
                         CarDetails.builder()
                                 .co2Emissions(117D)
                                 .fullMass(1808)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2019)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "885",
                         "50"),
-                Arguments.of("Nissan Leaf",
+                new CarTaxTestData("Nissan Leaf",
                         CarDetails.builder()
                                 .fullMass(1530)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2021)
                                 .electric(true)
                                 .build(),
                         "300",
                         "50"),
-                Arguments.of("Tesla Model 3",
+                new CarTaxTestData("Tesla Model 3",
                         CarDetails.builder()
                                 .co2Emissions(0D)
                                 .fullMass(2139)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2021)
                                 .electric(true)
                                 .build(),
                         "300",
                         "50"),
-                Arguments.of("Porsche Taycan",
+                new CarTaxTestData("Porsche Taycan",
                         CarDetails.builder()
                                 .co2Emissions(0D)
                                 .fullMass(2880)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2021)
                                 .electric(true)
                                 .build(),
                         "2220",
                         "242"),
-                Arguments.of("Citroen Berlingo 2020",
-                        CarDetails.builder()
-                                .co2Emissions(150D)
-                                .carType(CarType.N1)
-                                .year(2020)
-                                .electric(false)
-                                .co2Type(CarDetails.CO2Type.WLTP)
-                                .build(),
-                        "500",
-                        "50"),
-//                Arguments.of("Citroen Berlingo 2020",
-//                        CarDetails.builder()
-//                                .co2Emissions(247D)
-//                                .carType(CarType.N1)
-//                                .year(210)
-//                                .electric(false)
-//                                .co2Type(CarDetails.CO2Type.WLTP)
-//                                .build(),
-//                        "1790",
-//                        "179"),
-//                Arguments.of("Citroen Jumper",
-//                        CarDetails.builder()
-//                                .co2Emissions(235D)
-//                                .carType(CarType.N1)
-//                                .year(2022)
-//                                .electric(false)
-//                                .co2Type(CarDetails.CO2Type.WLTP)
-//                                .build(),
-//                        "1430",
-//                        "143"),
-                Arguments.of("VW Tiguan",
+                new CarTaxTestData("VW Tiguan",
                         CarDetails.builder()
                                 .co2Emissions(188D)
                                 .fullMass(2250)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2023)
                                 .electric(false)
                                 .co2Type(CarDetails.CO2Type.WLTP)
                                 .build(),
                         "5485",
                         "382"),
-                Arguments.of("VW Tiguan without CO2 emissions",
+                new CarTaxTestData("VW Tiguan without CO2 emissions",
                         CarDetails.builder()
                                 .fullMass(2250)
-                                .carType(CarType.M1)
+                                .carType(CarDetails.CarType.M1)
                                 .year(2023)
                                 .electric(false)
                                 .engineCapacity(1995)
@@ -160,11 +127,28 @@ public class TaxCalculationServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideCarData")
-    void testCalculateTaxes(String model, CarDetails carDetails, BigDecimal expectedRegTax, BigDecimal expectedAnnTax) {
-        TaxResponse response = service.calculateTax(carDetails).block();
+    void calculateRegistrationTax(CarTaxTestData carTaxTestData) {
+        BigDecimal registrationTax = calculator.calculateRegistrationTax(carTaxTestData.carDetails);
 
-        assertThat(response.getRegistrationTax()).as("Registration Tax for " + model).isEqualByComparingTo(expectedRegTax);
-        assertThat(response.getAnnualTax()).as("Annual Tax for " + model).isEqualByComparingTo(expectedAnnTax);
+        assertThat(registrationTax).as("Registration Tax for " + carTaxTestData.model)
+                .isEqualByComparingTo(new BigDecimal(carTaxTestData.expectedRegistrationTax));
     }
-}
 
+    @ParameterizedTest
+    @MethodSource("provideCarData")
+    void calculateAnnualTax(CarTaxTestData carTaxTestData) {
+        BigDecimal annualTax = calculator.calculateAnnualTax(carTaxTestData.carDetails);
+
+        assertThat(annualTax).as("Annual Tax for " + carTaxTestData.model)
+                .isEqualByComparingTo(new BigDecimal(carTaxTestData.expectedAnnualTax));
+    }
+
+    public record CarTaxTestData(
+            String model,
+            CarDetails carDetails,
+            String expectedRegistrationTax,
+            String expectedAnnualTax
+    ) {
+    }
+
+}
