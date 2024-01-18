@@ -208,4 +208,31 @@ class TaxCalculationControllerIntegrationTest {
                             );
                 });
     }
+    
+    @Test
+    void testCalculateTaxEndpoint_whenCo2EmissionsIsNaN() {
+        CarDetails carDetails = CarDetails.builder()
+                .co2Emissions(Double.NaN)
+                .fullMass(2250)
+                .carType(CarDetails.CarType.M1)
+                .engineCapacity(1995)
+                .enginePower(150)
+                .year(2023)
+                .electric(false)
+                .co2Type(CarDetails.CO2Type.WLTP)
+                .build();
+        
+        webTestClient.post().uri("/tax/calculate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(carDetails)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(TaxResponse.class)
+                .consumeWith(response -> {
+                    TaxResponse calculatedTax = response.getResponseBody();
+                    assertThat(calculatedTax.registrationTax()).isNotNull().isEqualByComparingTo(new BigDecimal("2599.75"));
+                    assertThat(calculatedTax.annualTax()).isNotNull().isEqualByComparingTo(new BigDecimal("150"));
+                });
+    }
+    
 }
