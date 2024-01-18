@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,7 +19,7 @@ import lombok.ToString;
 public class CarDetails {
 
     @Schema(description = "CO2 emissions of the car", example = "188.0", nullable = true)
-    private Double co2Emissions;
+    private BigDecimal co2Emissions;
 
     @Schema(required = true, description = "The full mass of the car in kilograms", example = "2250")
     private Integer fullMass;
@@ -77,18 +79,5 @@ public class CarDetails {
         @Schema(description = "New European Driving Cycle")
         NEDC
     }
-    
-    public void setCo2Emissions(Double co2Emissions) {
-        if (co2Emissions != null && co2Emissions.isNaN()) {
-            // Option 1: Set to null if NaN is encountered
-            this.co2Emissions = null;
-
-            // Option 2: Throw an exception
-            // throw new IllegalArgumentException("co2Emissions cannot be NaN");
-        } else {
-            this.co2Emissions = co2Emissions;
-        }
-    }
-
 
 }
