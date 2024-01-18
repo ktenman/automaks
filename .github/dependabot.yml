@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "maven" # For Maven projects
+    directory: "/" # Root directory where pom.xml is located
+    schedule:
+      interval: "weekly" # Frequency of update checks
