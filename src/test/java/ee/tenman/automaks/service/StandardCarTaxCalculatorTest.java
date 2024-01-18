@@ -17,7 +17,7 @@ class StandardCarTaxCalculatorTest {
         return Stream.of(
                 new CarTaxTestData("Porsche Cayenne",
                         CarDetails.builder()
-                                .co2Emissions(299D)
+                                .co2Emissions(BigDecimal.valueOf(299D))
                                 .fullMass(2860)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -28,7 +28,7 @@ class StandardCarTaxCalculatorTest {
                         "1064"),
                 new CarTaxTestData("Audi Q7",
                         CarDetails.builder()
-                                .co2Emissions(221D)
+                                .co2Emissions(BigDecimal.valueOf(221D))
                                 .fullMass(2850)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -39,7 +39,7 @@ class StandardCarTaxCalculatorTest {
                         "748"),
                 new CarTaxTestData("Honda CRV",
                         CarDetails.builder()
-                                .co2Emissions(196D)
+                                .co2Emissions(BigDecimal.valueOf(196D))
                                 .fullMass(2350)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -50,7 +50,7 @@ class StandardCarTaxCalculatorTest {
                         "450"),
                 new CarTaxTestData("VW Passat",
                         CarDetails.builder()
-                                .co2Emissions(150D)
+                                .co2Emissions(BigDecimal.valueOf(150D))
                                 .fullMass(1990)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -61,7 +61,7 @@ class StandardCarTaxCalculatorTest {
                         "149"),
                 new CarTaxTestData("Skoda Octavia",
                         CarDetails.builder()
-                                .co2Emissions(117D)
+                                .co2Emissions(BigDecimal.valueOf(117D))
                                 .fullMass(1808)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -81,7 +81,7 @@ class StandardCarTaxCalculatorTest {
                         "50"),
                 new CarTaxTestData("Tesla Model 3",
                         CarDetails.builder()
-                                .co2Emissions(0D)
+                                .co2Emissions(BigDecimal.ZERO)
                                 .fullMass(2139)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2021)
@@ -91,7 +91,7 @@ class StandardCarTaxCalculatorTest {
                         "50"),
                 new CarTaxTestData("Porsche Taycan",
                         CarDetails.builder()
-                                .co2Emissions(0D)
+                                .co2Emissions(BigDecimal.ZERO)
                                 .fullMass(2880)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2021)
@@ -101,7 +101,7 @@ class StandardCarTaxCalculatorTest {
                         "242"),
                 new CarTaxTestData("VW Tiguan",
                         CarDetails.builder()
-                                .co2Emissions(188D)
+                                .co2Emissions(BigDecimal.valueOf(188D))
                                 .fullMass(2250)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2023)

@@ -30,7 +30,7 @@ class TaxCalculationControllerIntegrationTest {
         return Stream.of(
                 Arguments.of("Porsche Cayenne",
                         CarDetails.builder()
-                                .co2Emissions(299D)
+                                .co2Emissions(BigDecimal.valueOf(299D))
                                 .fullMass(2860)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -41,7 +41,7 @@ class TaxCalculationControllerIntegrationTest {
                         "1064"),
                 Arguments.of("Audi Q7",
                         CarDetails.builder()
-                                .co2Emissions(221D)
+                                .co2Emissions(BigDecimal.valueOf(221D))
                                 .fullMass(2850)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -52,7 +52,7 @@ class TaxCalculationControllerIntegrationTest {
                         "748"),
                 Arguments.of("Honda CRV",
                         CarDetails.builder()
-                                .co2Emissions(196D)
+                                .co2Emissions(BigDecimal.valueOf(196D))
                                 .fullMass(2350)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -63,7 +63,7 @@ class TaxCalculationControllerIntegrationTest {
                         "450"),
                 Arguments.of("VW Passat",
                         CarDetails.builder()
-                                .co2Emissions(150D)
+                                .co2Emissions(BigDecimal.valueOf(150D))
                                 .fullMass(1990)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -74,7 +74,7 @@ class TaxCalculationControllerIntegrationTest {
                         "149"),
                 Arguments.of("Skoda Octavia",
                         CarDetails.builder()
-                                .co2Emissions(117D)
+                                .co2Emissions(BigDecimal.valueOf(117D))
                                 .fullMass(1808)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2019)
@@ -94,7 +94,7 @@ class TaxCalculationControllerIntegrationTest {
                         "50"),
                 Arguments.of("Tesla Model 3",
                         CarDetails.builder()
-                                .co2Emissions(0D)
+                                .co2Emissions(BigDecimal.ZERO)
                                 .fullMass(2139)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2021)
@@ -104,7 +104,7 @@ class TaxCalculationControllerIntegrationTest {
                         "50"),
                 Arguments.of("Porsche Taycan",
                         CarDetails.builder()
-                                .co2Emissions(0D)
+                                .co2Emissions(BigDecimal.ZERO)
                                 .fullMass(2880)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2021)
@@ -114,7 +114,7 @@ class TaxCalculationControllerIntegrationTest {
                         "242"),
                 Arguments.of("VW Tiguan",
                         CarDetails.builder()
-                                .co2Emissions(188D)
+                                .co2Emissions(BigDecimal.valueOf(188D))
                                 .fullMass(2250)
                                 .carType(CarDetails.CarType.M1)
                                 .year(2023)
@@ -190,7 +190,7 @@ class TaxCalculationControllerIntegrationTest {
                 .carType(CarDetails.CarType.M1)
                 .fullMass(2000)
                 .year(2019)
-                .co2Emissions(150D)
+                .co2Emissions(BigDecimal.valueOf(150D))
                 .build();
         webTestClient.post().uri("/tax/calculate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -212,7 +212,7 @@ class TaxCalculationControllerIntegrationTest {
     @Test
     void testCalculateTaxEndpoint_whenCo2EmissionsIsNaN() {
         CarDetails carDetails = CarDetails.builder()
-                .co2Emissions(Double.NaN)
+                .co2Emissions(null)
                 .fullMass(2250)
                 .carType(CarDetails.CarType.M1)
                 .engineCapacity(1995)
