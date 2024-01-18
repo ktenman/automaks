@@ -77,5 +77,18 @@ public class CarDetails {
         @Schema(description = "New European Driving Cycle")
         NEDC
     }
+    
+    public void setCo2Emissions(Double co2Emissions) {
+        if (co2Emissions != null && co2Emissions.isNaN()) {
+            // Option 1: Set to null if NaN is encountered
+            this.co2Emissions = null;
+
+            // Option 2: Throw an exception
+            // throw new IllegalArgumentException("co2Emissions cannot be NaN");
+        } else {
+            this.co2Emissions = co2Emissions;
+        }
+    }
+
 
 }
