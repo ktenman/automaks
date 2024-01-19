@@ -1,5 +1,6 @@
 package ee.tenman.automaks.controller;
 
+import ee.tenman.automaks.config.aspect.Loggable;
 import ee.tenman.automaks.dto.CarDetails;
 import ee.tenman.automaks.dto.TaxResponse;
 import ee.tenman.automaks.service.TaxCalculationService;
@@ -20,6 +21,7 @@ public class TaxCalculationController {
     private TaxCalculationService taxCalculationService;
 
     @PostMapping("/calculate")
+    @Loggable
     public Mono<ResponseEntity<TaxResponse>> calculateTax(@RequestBody @Valid CarDetails carDetails) {
         return taxCalculationService.calculateTax(carDetails).map(ResponseEntity::ok);
     }

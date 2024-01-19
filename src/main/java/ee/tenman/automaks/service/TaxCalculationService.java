@@ -1,6 +1,5 @@
 package ee.tenman.automaks.service;
 
-import ee.tenman.automaks.config.aspect.Loggable;
 import ee.tenman.automaks.dto.CarDetails;
 import ee.tenman.automaks.dto.TaxResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +11,7 @@ import java.math.BigDecimal;
 @Service
 @Slf4j
 public class TaxCalculationService {
-
-    @Loggable
+    
     public Mono<TaxResponse> calculateTax(CarDetails carDetails) {
 
         TaxCalculator taxCalculator = TaxCalculatorFactory.getTaxCalculator(carDetails.getCarType());
