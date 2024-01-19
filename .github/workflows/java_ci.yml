@@ -62,4 +62,3 @@ jobs:
             -d '{"event_type": "trigger-deploy"}' \
             -s -w "Response: %{http_code}")
           echo "Trigger response: $response"
-
