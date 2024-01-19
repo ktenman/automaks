@@ -55,8 +55,11 @@ jobs:
       - name: Trigger Deploy in Elektrihind
         if: matrix.platform == 'linux/amd64' && success()
         run: |
-          curl -X POST \
+          response=$(curl -X POST \
             -H "Authorization: token ${{ secrets.ELEKTRIHIND_REPOSITORY_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/ktenman/elektrihind/dispatches \
-            -d '{"event_type": "trigger-deploy"}'
+            -d '{"event_type": "trigger-deploy"}' \
+            -s -w "Response: %{http_code}")
+          echo "Trigger response: $response"
+
