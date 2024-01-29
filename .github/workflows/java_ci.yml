@@ -63,7 +63,6 @@ jobs:
             -s -w "Response: %{http_code}")
           echo "Trigger response: $response"
 
-
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     needs: [ test ]
