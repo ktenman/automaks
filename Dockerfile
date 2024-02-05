@@ -1,8 +1,11 @@
-# Set the base image to Maven with Java 21
+# Build Stage
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
 # Set the current working directory inside the container
 WORKDIR /app
+
+# Install curl in the Maven image for build purposes
+RUN apk --no-cache add curl
 
 # Copy the Maven POM file and download the dependencies, so they will be cached
 COPY pom.xml .
@@ -20,6 +23,9 @@ RUN mkdir /app/cache && chown 1000:1000 /app/cache
 
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/*.jar app.jar
+
+# Copy curl binary from the curl-stage
+COPY --from=build /usr/bin/curl /usr/bin/curl
 
 # Set the timezone for the JVM
 ENV JAVA_OPTS="-Xmx600m -Xms300m -Duser.timezone=Europe/Tallinn"
