@@ -1,21 +1,18 @@
 # Build Stage
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
-# Set the current working directory inside the container
 WORKDIR /app
 
 # Install curl in the Maven image for build purposes
 RUN apk --no-cache add curl
 
-# Copy the Maven POM file and download the dependencies, so they will be cached
 COPY pom.xml .
-
-# Copy the project files and build the project
 COPY src /app/src
 RUN mvn -T 1C --batch-mode --quiet package -DskipTests
 
-FROM bellsoft/liberica-runtime-container:jre-21-slim-musl
-# Set the current working directory inside the container
+# Final Stage
+FROM amazoncorretto:21.0.2
+
 WORKDIR /app
 
 # Optionally, create the cache directory and set proper permissions
@@ -24,8 +21,8 @@ RUN mkdir /app/cache && chown 1000:1000 /app/cache
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Copy curl binary from the curl-stage
-COPY --from=build /usr/bin/curl /usr/bin/curl
+# Install curl using yum
+RUN yum install -y curl
 
 # Set the timezone for the JVM
 ENV JAVA_OPTS="-Xmx600m -Xms300m -Duser.timezone=Europe/Tallinn"
